@@ -17,6 +17,8 @@ public class Data {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(name = "date")
+    @Temporal(TemporalType.DATE)
     private Date date;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "actual_data_id", referencedColumnName = "id")
