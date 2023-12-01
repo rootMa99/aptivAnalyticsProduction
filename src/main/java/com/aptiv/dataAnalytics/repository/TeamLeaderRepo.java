@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TeamLeaderRepo extends JpaRepository<TeamLeader, Long> {
+    TeamLeader findByName(String name);
 }

@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CrewRepo extends JpaRepository<Crew, Long> {
+    Crew findByName(String name);
 }

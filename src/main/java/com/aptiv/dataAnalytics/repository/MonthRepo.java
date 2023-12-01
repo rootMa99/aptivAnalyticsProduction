@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface MonthRepo extends JpaRepository<Month, Long> {
+    Month findByMonthName(String monthName);
 }

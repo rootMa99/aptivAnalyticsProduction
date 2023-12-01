@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface WeekRepo extends JpaRepository<Week, Long> {
+    Week findByWeekName(String weekName);
 }

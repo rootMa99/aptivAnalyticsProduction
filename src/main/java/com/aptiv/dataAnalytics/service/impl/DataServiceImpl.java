@@ -50,10 +50,64 @@ public class DataServiceImpl implements DataService {
                         coordinator=coordinatorRepo.save(c);
                     }
                     data.setCoordinator(coordinator);
-                    ShiftLeader shiftLeader;
-
+                    ShiftLeader shiftLeader= shiftLeaderRepo.findByName(dataExcel.getShiftLeader());
+                    if (shiftLeader==null){
+                        ShiftLeader sl=new ShiftLeader();
+                        sl.setName(dataExcel.getShiftLeader());
+                        sl.setCoordinator(coordinator);
+                        shiftLeader= shiftLeaderRepo.save(sl);
+                    }
+                    data.setShiftLeader(shiftLeader);
+                    TeamLeader teamLeader=teamLeaderRepo.findByName(dataExcel.getTeamLeader());
+                    if (teamLeader==null){
+                        TeamLeader tl= new TeamLeader();
+                        tl.setName(dataExcel.getTeamLeader());
+                        tl.setShiftLeader(shiftLeader);
+                        teamLeader= teamLeaderRepo.save(tl);
+                    }
+                    data.setTeamLeader(teamLeader);
+                    Month month= monthRepo.findByMonthName(dataExcel.getMonth());
+                    if (month==null){
+                        Month month1= new Month();
+                        month1.setMonthName(dataExcel.getMonth());
+                        month= monthRepo.save(month1);
+                    }
+                    data.setMonth(month);
+                    Week week= weekRepo.findByWeekName(dataExcel.getWeek());
+                    if(week==null){
+                        Week wk=new Week();
+                        wk.setWeekName(dataExcel.getWeek());
+                        wk.setMonth(month);
+                        week= weekRepo.save(wk);
+                    }
+                    data.setWeek(week);
+                    Project project=projectRepo.findByName(dataExcel.getProject());
+                    if(project==null){
+                        Project prj=new Project();
+                        prj.setName(dataExcel.getProject());
+                        project=projectRepo.save(prj);
+                    }
+                    data.setProject(project);
+                    Family family=familyRepo.findByName(dataExcel.getFamily());
+                    if (family==null){
+                        Family f=new Family();
+                        f.setName(dataExcel.getFamily());
+                        f.setProject(project);
+                        family=familyRepo.save(f);
+                    }
+                    data.setFamily(family);
+                    Crew crew=crewRepo.findByName(dataExcel.getCrew());
+                    if (crew==null){
+                        Crew cr=new Crew();
+                        cr.setName(dataExcel.getCrew());
+                        cr.setFamily(family);
+                        cr.setTeamLeader(teamLeader);
+                        crew= crewRepo.save(cr);
+                    }
+                    data.setCrew(crew);
+                    dataList.add(data);
                 }
-
+                dataRepo.saveAll(dataList);
 
             } catch (IOException e) {
                 throw new RuntimeException(e);

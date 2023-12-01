@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ShiftLeaderRepo extends JpaRepository<ShiftLeader, Long> {
+    ShiftLeader findByName(String name);
 }
