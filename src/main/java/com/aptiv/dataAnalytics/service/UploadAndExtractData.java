@@ -46,17 +46,13 @@ public class UploadAndExtractData {
                     //Cell cell = cellIterator.next();
                     Cell cell = row.getCell(cellIndex, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
                     switch (cellIndex) {
-                        case 0 -> {
-                        }
-                        case 1 -> {
-                        }
+                        case 0, 1, 11 -> {}
                         case 2 -> {
                             if (cell.getCellType() == CellType.STRING) {
                                 dataExcel.setProject(cell.getStringCellValue());
                             }
                         }
                         case 3 -> {
-                            System.out.println(cell.getCellType());
                             if (cell.getCellType() == CellType.STRING) {
                                 dataExcel.setFamily(cell.getStringCellValue());
                             }
@@ -95,8 +91,6 @@ public class UploadAndExtractData {
                             if (cell.getCellType() == CellType.NUMERIC) {
                                 dataExcel.setDate(cell.getDateCellValue());
                             }
-                        }
-                        case 11 -> {
                         }
                         case 12 -> {
                             if (cell.getCellType() == CellType.NUMERIC) {
