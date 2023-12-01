@@ -2,7 +2,9 @@ package com.aptiv.dataAnalytics.service.impl;
 
 
 import com.aptiv.dataAnalytics.domain.*;
+import com.aptiv.dataAnalytics.model.ActualDataExcel;
 import com.aptiv.dataAnalytics.model.DataExcel;
+import com.aptiv.dataAnalytics.model.DataTargetExcel;
 import com.aptiv.dataAnalytics.repository.*;
 import com.aptiv.dataAnalytics.service.DataService;
 import com.aptiv.dataAnalytics.service.UploadAndExtractData;
@@ -31,6 +33,34 @@ public class DataServiceImpl implements DataService {
     ShiftLeaderRepo shiftLeaderRepo;
     TeamLeaderRepo teamLeaderRepo;
     WeekRepo weekRepo;
+
+    @Override
+    public List<DataExcel> getAllData() {
+        ModelMapper mp = new ModelMapper();
+        mp.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+        List<Data> data=dataRepo.findAll();
+        List<DataExcel>dataExcelList=new ArrayList<>();
+
+        for (Data d:data){
+            DataExcel dataExcel=new DataExcel();
+            dataExcel.setDataTargetExcel(mp.map(d.getDataTarget(), DataTargetExcel.class));
+            dataExcel.setActualDataExcel(mp.map(d.getActualData(), ActualDataExcel.class));
+            dataExcel.setDate(d.getDate());
+            dataExcel.setWeek(d.getWeek().getWeekName());
+            dataExcel.setMonth(d.getMonth().getMonthName());
+            dataExcel.setCoordinator(d.getCoordinator().getName());
+            dataExcel.setShiftLeader(d.getShiftLeader().getName());
+            dataExcel.setTeamLeader(d.getTeamLeader().getName());
+            dataExcel.setCrew(d.getCrew().getName());
+            dataExcel.setFamily(d.getFamily().getName());
+            dataExcel.setProject(d.getProject().getName());
+            dataExcelList.add(dataExcel);
+        }
+        return dataExcelList;
+    }
+
+
+
     @Override
     public void saveDataToDataBase(MultipartFile file) throws IllegalAccessException {
         ModelMapper mp=new ModelMapper();
@@ -40,7 +70,9 @@ public class DataServiceImpl implements DataService {
                 List<DataExcel> dataExcelList= UploadAndExtractData.getDataFromEXcelFile(file.getInputStream());
                 List<Data> dataList= new ArrayList<>();
                 for (DataExcel dataExcel: dataExcelList){
+                    System.out.println("record saved");
                     Data data=new Data();
+                    data.setDate(dataExcel.getDate());
                     data.setActualData(mp.map(dataExcel.getActualDataExcel(), ActualData.class));
                     data.setDataTarget(mp.map(dataExcel.getDataTargetExcel(), DataTarget.class));
                     Coordinator coordinator= coordinatorRepo.findByName(dataExcel.getCoordinator());
