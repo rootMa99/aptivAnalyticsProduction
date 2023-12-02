@@ -9,5 +9,5 @@ import java.util.List;
 public interface DataService {
     void saveDataToDataBase(MultipartFile file) throws IllegalAccessException;
     List<DataExcel> getAllData();
-
+    List<DataExcel> getAllByProject(String name);
 }

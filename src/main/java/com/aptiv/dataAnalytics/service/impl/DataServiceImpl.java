@@ -35,6 +35,31 @@ public class DataServiceImpl implements DataService {
     WeekRepo weekRepo;
 
     @Override
+    public List<DataExcel> getAllByProject(String name) {
+        ModelMapper mp = new ModelMapper();
+        mp.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+        List<Data> data=dataRepo.findAllByProjectName(name);
+        List<DataExcel>dataExcelList=new ArrayList<>();
+
+        for (Data d:data){
+            DataExcel dataExcel=new DataExcel();
+            dataExcel.setDataTargetExcel(mp.map(d.getDataTarget(), DataTargetExcel.class));
+            dataExcel.setActualDataExcel(mp.map(d.getActualData(), ActualDataExcel.class));
+            dataExcel.setDate(d.getDate());
+            dataExcel.setWeek(d.getWeek().getWeekName());
+            dataExcel.setMonth(d.getMonth().getMonthName());
+            dataExcel.setCoordinator(d.getCoordinator().getName());
+            dataExcel.setShiftLeader(d.getShiftLeader().getName());
+            dataExcel.setTeamLeader(d.getTeamLeader().getName());
+            dataExcel.setCrew(d.getCrew().getName());
+            dataExcel.setFamily(d.getFamily().getName());
+            dataExcel.setProject(d.getProject().getName());
+            dataExcelList.add(dataExcel);
+        }
+        return dataExcelList;
+    }
+
+    @Override
     public List<DataExcel> getAllData() {
         ModelMapper mp = new ModelMapper();
         mp.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
