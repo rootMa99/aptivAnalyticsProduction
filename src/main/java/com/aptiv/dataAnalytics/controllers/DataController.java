@@ -23,7 +23,7 @@ public class DataController {
         return dataService.getAllData();
     }
     @GetMapping(path="/getData")
-    public List<DataExcel> getAllData(@RequestParam String projectName){
+    public ProjectRest getAllData(@RequestParam String projectName){
         return dataService.getAllByProject(projectName);
     }
     @GetMapping(path="/projects")

@@ -5,6 +5,7 @@ import com.aptiv.dataAnalytics.domain.*;
 import com.aptiv.dataAnalytics.model.ActualDataExcel;
 import com.aptiv.dataAnalytics.model.DataExcel;
 import com.aptiv.dataAnalytics.model.DataTargetExcel;
+import com.aptiv.dataAnalytics.model.ProjectRest;
 import com.aptiv.dataAnalytics.repository.*;
 import com.aptiv.dataAnalytics.service.DataService;
 import com.aptiv.dataAnalytics.service.UploadAndExtractData;
@@ -35,13 +36,13 @@ public class DataServiceImpl implements DataService {
     WeekRepo weekRepo;
 
     @Override
-    public List<DataExcel> getAllByProject(String name) {
+    public ProjectRest getAllByProject(String name) {
         ModelMapper mp = new ModelMapper();
         mp.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-        List<Data> data=dataRepo.findAllByProjectName(name);
+        Project data=projectRepo.findByName(name);
         List<DataExcel>dataExcelList=new ArrayList<>();
-
-        for (Data d:data){
+        ProjectRest pr= mp.map(data, ProjectRest.class);
+        for (Data d:data.getData()){
             DataExcel dataExcel=new DataExcel();
             dataExcel.setDataTargetExcel(mp.map(d.getDataTarget(), DataTargetExcel.class));
             dataExcel.setActualDataExcel(mp.map(d.getActualData(), ActualDataExcel.class));
@@ -56,7 +57,8 @@ public class DataServiceImpl implements DataService {
             dataExcel.setProject(d.getProject().getName());
             dataExcelList.add(dataExcel);
         }
-        return dataExcelList;
+        pr.setData(dataExcelList);
+        return pr;
     }
 
     @Override
