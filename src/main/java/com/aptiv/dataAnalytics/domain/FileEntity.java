@@ -20,6 +20,7 @@ public class FileEntity {
     private String fileName;
     private String fileType;
     @Lob
+    @Column(columnDefinition="LONGBLOB")
     private byte[] data;
     private String fileDownloadUri;
     @OneToOne(cascade = CascadeType.ALL)

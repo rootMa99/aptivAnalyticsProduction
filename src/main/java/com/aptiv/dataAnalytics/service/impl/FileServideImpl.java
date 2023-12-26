@@ -1,9 +1,11 @@
 package com.aptiv.dataAnalytics.service.impl;
 
 import com.aptiv.dataAnalytics.domain.FileEntity;
+import com.aptiv.dataAnalytics.domain.ShiftLeader;
 import com.aptiv.dataAnalytics.exception.FileStorageException;
 import com.aptiv.dataAnalytics.model.Utils;
 import com.aptiv.dataAnalytics.repository.FilesRepository;
+import com.aptiv.dataAnalytics.repository.ShiftLeaderRepo;
 import com.aptiv.dataAnalytics.service.FileService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,6 +15,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Arrays;
 
 
 @Service
@@ -22,6 +25,7 @@ public class FileServideImpl implements FileService {
 
     Utils utils;
     FilesRepository filesRepository;
+    ShiftLeaderRepo shiftLeaderRepo;
 
     @Override
     public FileEntity storeFile(MultipartFile file) {
@@ -48,7 +52,7 @@ public class FileServideImpl implements FileService {
 
             String fileId = utils.generateProjectId(22);
             String fileDownloadUri =
-                    ServletUriComponentsBuilder.fromCurrentContextPath().path("/files").path("/downloadFile/").path(fileId).toUriString();
+                    ServletUriComponentsBuilder.fromCurrentContextPath().path("/data").path("/downloadFile/").path(fileId).toUriString();
 
             return new FileEntity(fileId, fileName, file.getContentType(), file.getBytes(),
                     fileDownloadUri);
@@ -61,6 +65,12 @@ public class FileServideImpl implements FileService {
 
     @Override
     public FileEntity addFileToSL(String name, MultipartFile file) {
-        return null;
+        FileEntity fileEntity= uploadFile(file);
+        ShiftLeader shiftLeader= shiftLeaderRepo.findByName(name);
+        if (shiftLeader==null)throw new FileStorageException("No Record Found with name: "+name);
+        fileEntity.setShiftLeader(shiftLeader);
+        System.out.println(Arrays.toString(fileEntity.getData()));
+        fileEntity= filesRepository.save(fileEntity);
+        return fileEntity;
     }
 }
