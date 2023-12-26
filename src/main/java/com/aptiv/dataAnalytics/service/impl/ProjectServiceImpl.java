@@ -33,6 +33,7 @@ public class ProjectServiceImpl implements ProjectService {
 
             for (Data d:p.getData()){
                 DataExcel dataExcel=new DataExcel();
+                dataExcel.setProject(d.getProject().getName());
                 dataExcel.setDataTargetExcel(mp.map(d.getDataTarget(), DataTargetExcel.class));
                 dataExcel.setActualDataExcel(mp.map(d.getActualData(), ActualDataExcel.class));
                 dataExcel.setDate(d.getDate());

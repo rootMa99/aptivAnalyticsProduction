@@ -23,4 +23,6 @@ public class Coordinator {
     @OneToMany(mappedBy = "coordinator", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Data> data;
+    @OneToOne(mappedBy = "coordinator")
+    private FileEntity file;
 }

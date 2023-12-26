@@ -19,5 +19,6 @@ public class ActualDataExcel {
     private double ab;
     private double tlo;
     private double dt;
+    private double wsd;
 
 }

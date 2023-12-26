@@ -29,5 +29,7 @@ public class ShiftLeader {
     @OneToMany(mappedBy = "shiftLeader", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<TeamLeader> teamLeaders;
+    @OneToOne(mappedBy = "shiftLeader")
+    private FileEntity file;
 
 }

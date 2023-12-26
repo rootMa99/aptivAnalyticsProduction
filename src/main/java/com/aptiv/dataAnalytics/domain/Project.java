@@ -26,4 +26,6 @@ public class Project {
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Family> families;
+    @OneToOne(mappedBy = "project")
+    private FileEntity file;
 }

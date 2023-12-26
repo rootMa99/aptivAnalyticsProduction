@@ -194,12 +194,18 @@ public class UploadAndExtractData {
                                 dataTargetExcel.setScrapTarget(cell.getNumericCellValue());
                             }
                         }
+                        case 29 -> {
+
+                            if (cell.getCellType() == CellType.NUMERIC) {
+                                actualDataExcel.setWsd(cell.getNumericCellValue());
+                            }
+                        }
                         default -> {
 
                         }
                     }
                     cellIndex++;
-                    if (cellIndex == 29) {
+                    if (cellIndex == 30) {
                         rowIndex++;
                         break;
                     }

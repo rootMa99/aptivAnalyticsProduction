@@ -33,6 +33,8 @@ public class ActualData {
     private Double tlo;
     @Column(name = "dt")
     private Double dt;
+    @Column(name = "wsd")
+    private Double wsd;
     @OneToOne(mappedBy = "actualData")
     private Data data;
 }
