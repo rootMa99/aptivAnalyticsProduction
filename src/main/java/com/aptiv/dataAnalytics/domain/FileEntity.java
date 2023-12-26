@@ -16,6 +16,7 @@ public class FileEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String fileId;
     private String fileName;
     private String fileType;
     @Lob
@@ -30,4 +31,13 @@ public class FileEntity {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "project_id", referencedColumnName = "id")
     private Project project;
+
+
+    public FileEntity( String fileId,String fileName, String fileType, byte[] data, String fileDownloadUri) {
+        this.fileId = fileId;
+        this.fileName = fileName;
+        this.fileType = fileType;
+        this.data = data;
+        this.fileDownloadUri= fileDownloadUri;
+    }
 }
