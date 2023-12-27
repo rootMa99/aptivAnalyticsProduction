@@ -34,13 +34,22 @@ public class ProjectServiceImpl implements ProjectService {
             for (Data d:p.getData()){
                 DataExcel dataExcel=new DataExcel();
                 dataExcel.setProject(d.getProject().getName());
+                if (d.getProject().getFile()!=null){
+                    dataExcel.setProjectUriPic(d.getProject().getFile().getFileDownloadUri());
+                }
                 dataExcel.setDataTargetExcel(mp.map(d.getDataTarget(), DataTargetExcel.class));
                 dataExcel.setActualDataExcel(mp.map(d.getActualData(), ActualDataExcel.class));
                 dataExcel.setDate(d.getDate());
                 dataExcel.setWeek(d.getWeek().getWeekName());
                 dataExcel.setMonth(d.getMonth().getMonthName());
                 dataExcel.setCoordinator(d.getCoordinator().getName());
+                if (d.getCoordinator().getFile()!=null){
+                    dataExcel.setCoordinatorUriPic(d.getCoordinator().getFile().getFileDownloadUri());
+                }
                 dataExcel.setShiftLeader(d.getShiftLeader().getName());
+                if (d.getShiftLeader().getFile()!=null){
+                    dataExcel.setShiftLeaderUriPic(d.getShiftLeader().getFile().getFileDownloadUri());
+                }
                 dataExcel.setTeamLeader(d.getTeamLeader().getName());
                 dataExcel.setCrew(d.getCrew().getName());
                 dataExcel.setFamily(d.getFamily().getName());
@@ -48,6 +57,11 @@ public class ProjectServiceImpl implements ProjectService {
             }
             pr.setData(dataExcelList);
             pr.setName(p.getName());
+            if(p.getFile()!=null){
+                pr.setProjectUriPic(p.getFile().getFileDownloadUri());
+            }
+
+
             projectRests.add(pr);
         }
         return projectRests;

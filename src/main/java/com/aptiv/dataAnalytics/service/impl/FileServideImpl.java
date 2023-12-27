@@ -1,10 +1,14 @@
 package com.aptiv.dataAnalytics.service.impl;
 
+import com.aptiv.dataAnalytics.domain.Coordinator;
 import com.aptiv.dataAnalytics.domain.FileEntity;
+import com.aptiv.dataAnalytics.domain.Project;
 import com.aptiv.dataAnalytics.domain.ShiftLeader;
 import com.aptiv.dataAnalytics.exception.FileStorageException;
 import com.aptiv.dataAnalytics.model.Utils;
+import com.aptiv.dataAnalytics.repository.CoordinatorRepo;
 import com.aptiv.dataAnalytics.repository.FilesRepository;
+import com.aptiv.dataAnalytics.repository.ProjectRepo;
 import com.aptiv.dataAnalytics.repository.ShiftLeaderRepo;
 import com.aptiv.dataAnalytics.service.FileService;
 import lombok.AllArgsConstructor;
@@ -26,6 +30,8 @@ public class FileServideImpl implements FileService {
     Utils utils;
     FilesRepository filesRepository;
     ShiftLeaderRepo shiftLeaderRepo;
+    CoordinatorRepo coordinatorRepo;
+    ProjectRepo projectRepo;
 
     @Override
     public FileEntity storeFile(MultipartFile file) {
@@ -73,4 +79,26 @@ public class FileServideImpl implements FileService {
         fileEntity= filesRepository.save(fileEntity);
         return fileEntity;
     }
+
+    @Override
+    public FileEntity addFileToCoordinator(String name, MultipartFile file) {
+        FileEntity fileEntity= uploadFile(file);
+        Coordinator coordinator= coordinatorRepo.findByName(name);
+        if(coordinator==null)throw new FileStorageException("No Record Found with name: "+name);
+        fileEntity.setCoordinator(coordinator);
+        fileEntity= filesRepository.save(fileEntity);
+        return fileEntity;
+    }
+
+    @Override
+    public FileEntity addFileToProject(String projectName, MultipartFile file) {
+        FileEntity fileEntity= uploadFile(file);
+        Project project= projectRepo.findByName(projectName);
+        if (project==null)throw new FileStorageException("No Record Found with name: "+projectName);
+        fileEntity.setProject(project);
+        fileEntity= filesRepository.save(fileEntity);
+        return fileEntity;
+    }
+
+
 }

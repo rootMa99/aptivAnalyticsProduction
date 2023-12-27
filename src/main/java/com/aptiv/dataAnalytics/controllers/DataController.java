@@ -60,4 +60,18 @@ public class DataController {
         BeanUtils.copyProperties(fileEntity, fileRest);
         return fileRest;
     }
+    @PostMapping("/coordinator/{coordinatorName}")
+    public FileRest addFileToCoordinator(@PathVariable String coordinatorName, @RequestParam(value="file") MultipartFile file){
+        FileEntity fileEntity=fileService.addFileToCoordinator(coordinatorName, file);
+        FileRest fileRest=new FileRest();
+        BeanUtils.copyProperties(fileEntity, fileRest);
+        return fileRest;
+    }
+    @PostMapping("/project/{projectName}")
+    public FileRest addFileToProject(@PathVariable String projectName, @RequestParam(value="file") MultipartFile file){
+        FileEntity fileEntity=fileService.addFileToProject(projectName, file);
+        FileRest fileRest=new FileRest();
+        BeanUtils.copyProperties(fileEntity, fileRest);
+        return fileRest;
+    }
 }

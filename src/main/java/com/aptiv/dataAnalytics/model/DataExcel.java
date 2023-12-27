@@ -13,10 +13,10 @@ import java.util.Date;
 @Getter
 public class DataExcel {
     private String project;
+    private String projectUriPic;
     private String family;
     private String crew;
     private String teamLeader;
-    private String teamLeaderUriPic;
     private String shiftLeader;
     private String shiftLeaderUriPic;
     private String coordinator;

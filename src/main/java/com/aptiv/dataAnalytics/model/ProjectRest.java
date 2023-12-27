@@ -16,7 +16,7 @@ import java.util.List;
 public class ProjectRest {
 
     private String name;
-
+    private String projectUriPic;
     private List<DataExcel> data;
 
 
