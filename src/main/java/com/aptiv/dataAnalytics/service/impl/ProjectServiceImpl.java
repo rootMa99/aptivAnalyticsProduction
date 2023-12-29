@@ -60,8 +60,6 @@ public class ProjectServiceImpl implements ProjectService {
             if(p.getFile()!=null){
                 pr.setProjectUriPic(p.getFile().getFileDownloadUri());
             }
-
-
             projectRests.add(pr);
         }
         return projectRests;
