@@ -12,6 +12,7 @@ import com.aptiv.dataAnalytics.repository.ProjectRepo;
 import com.aptiv.dataAnalytics.repository.ShiftLeaderRepo;
 import com.aptiv.dataAnalytics.service.FileService;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -95,9 +96,22 @@ public class FileServideImpl implements FileService {
         FileEntity fileEntity= uploadFile(file);
         Project project= projectRepo.findByName(projectName);
         if (project==null)throw new FileStorageException("No Record Found with name: "+projectName);
-        fileEntity.setProject(project);
-        fileEntity= filesRepository.save(fileEntity);
-        return fileEntity;
+        FileEntity fileE=filesRepository.findByProjectId(project.getId());
+        if (fileE==null){
+            fileEntity.setProject(project);
+            fileEntity= filesRepository.save(fileEntity);
+            return fileEntity;
+        }else {
+            fileE.setFileDownloadUri(fileEntity.getFileDownloadUri());
+            fileE.setFileType(fileEntity.getFileType());
+            fileE.setFileName(fileEntity.getFileName());
+            fileE.setFileId(fileEntity.getFileId());
+            fileE.setData(fileEntity.getData());
+            fileE.setProject(project);
+            fileE=filesRepository.save(fileE);
+            return fileE;
+        }
+
     }
 
 

@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface FilesRepository extends JpaRepository<FileEntity, Long> {
     FileEntity findByFileId(String fileId);
-
+    FileEntity findByProjectId(long id);
 }
