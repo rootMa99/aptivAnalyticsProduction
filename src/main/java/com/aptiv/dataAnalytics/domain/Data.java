@@ -19,7 +19,7 @@ public class Data {
     private Long id;
     @Column(name = "date")
     @Temporal(TemporalType.DATE)
-    private Date date;
+    private Date datecr;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "actual_data_id", referencedColumnName = "id")
     private ActualData actualData;

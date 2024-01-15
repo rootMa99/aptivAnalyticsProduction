@@ -14,6 +14,7 @@ import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -26,6 +27,7 @@ public class ProjectServiceImpl implements ProjectService {
         ModelMapper mp=new ModelMapper();
         mp.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         List<Project>projects=projectRepo.findAll();
+        //List<Project>projects=projectRepo.fi;
         List<ProjectRest>projectRests=new ArrayList<>();
         for (Project p:projects){
             ProjectRest pr=new ProjectRest();
@@ -39,7 +41,8 @@ public class ProjectServiceImpl implements ProjectService {
                 }
                 dataExcel.setDataTargetExcel(mp.map(d.getDataTarget(), DataTargetExcel.class));
                 dataExcel.setActualDataExcel(mp.map(d.getActualData(), ActualDataExcel.class));
-                dataExcel.setDate(d.getDate());
+                dataExcel.setDate(d.getDatecr());
+                System.out.println(d.getDatecr());
                 dataExcel.setWeek(d.getWeek().getWeekName());
                 dataExcel.setMonth(d.getMonth().getMonthName());
                 dataExcel.setCoordinator(d.getCoordinator().getName());

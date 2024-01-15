@@ -46,7 +46,7 @@ public class DataServiceImpl implements DataService {
             DataExcel dataExcel=new DataExcel();
             dataExcel.setDataTargetExcel(mp.map(d.getDataTarget(), DataTargetExcel.class));
             dataExcel.setActualDataExcel(mp.map(d.getActualData(), ActualDataExcel.class));
-            dataExcel.setDate(d.getDate());
+            dataExcel.setDate(d.getDatecr());
             dataExcel.setWeek(d.getWeek().getWeekName());
             dataExcel.setMonth(d.getMonth().getMonthName());
             dataExcel.setCoordinator(d.getCoordinator().getName());
@@ -72,7 +72,7 @@ public class DataServiceImpl implements DataService {
             DataExcel dataExcel=new DataExcel();
             dataExcel.setDataTargetExcel(mp.map(d.getDataTarget(), DataTargetExcel.class));
             dataExcel.setActualDataExcel(mp.map(d.getActualData(), ActualDataExcel.class));
-            dataExcel.setDate(d.getDate());
+            dataExcel.setDate(d.getDatecr());
             dataExcel.setWeek(d.getWeek().getWeekName());
             dataExcel.setMonth(d.getMonth().getMonthName());
             dataExcel.setCoordinator(d.getCoordinator().getName());
@@ -99,7 +99,7 @@ public class DataServiceImpl implements DataService {
                 for (DataExcel dataExcel: dataExcelList){
                     System.out.println("record saved");
                     Data data=new Data();
-                    data.setDate(dataExcel.getDate());
+                    data.setDatecr(dataExcel.getDate());
                     data.setActualData(mp.map(dataExcel.getActualDataExcel(), ActualData.class));
                     data.setDataTarget(mp.map(dataExcel.getDataTargetExcel(), DataTarget.class));
                     Coordinator coordinator= coordinatorRepo.findByName(dataExcel.getCoordinator());
