@@ -75,10 +75,21 @@ public class FileServideImpl implements FileService {
         FileEntity fileEntity= uploadFile(file);
         ShiftLeader shiftLeader= shiftLeaderRepo.findByName(name);
         if (shiftLeader==null)throw new FileStorageException("No Record Found with name: "+name);
-        fileEntity.setShiftLeader(shiftLeader);
-        System.out.println(Arrays.toString(fileEntity.getData()));
-        fileEntity= filesRepository.save(fileEntity);
-        return fileEntity;
+        FileEntity fileE=filesRepository.findByShiftLeaderId(shiftLeader.getId());
+        if (fileE==null){
+            fileEntity.setShiftLeader(shiftLeader);
+            fileEntity= filesRepository.save(fileEntity);
+            return fileEntity;
+        }else {
+            fileE.setFileDownloadUri(fileEntity.getFileDownloadUri());
+            fileE.setFileType(fileEntity.getFileType());
+            fileE.setFileName(fileEntity.getFileName());
+            fileE.setFileId(fileEntity.getFileId());
+            fileE.setData(fileEntity.getData());
+            fileE.setShiftLeader(shiftLeader);
+            fileE=filesRepository.save(fileE);
+            return fileE;
+        }
     }
 
     @Override
@@ -86,9 +97,21 @@ public class FileServideImpl implements FileService {
         FileEntity fileEntity= uploadFile(file);
         Coordinator coordinator= coordinatorRepo.findByName(name);
         if(coordinator==null)throw new FileStorageException("No Record Found with name: "+name);
-        fileEntity.setCoordinator(coordinator);
-        fileEntity= filesRepository.save(fileEntity);
-        return fileEntity;
+        FileEntity fileE=filesRepository.findByCoordinatorId(coordinator.getId());
+        if (fileE==null){
+            fileEntity.setCoordinator(coordinator);
+            fileEntity= filesRepository.save(fileEntity);
+            return fileEntity;
+        }else {
+            fileE.setFileDownloadUri(fileEntity.getFileDownloadUri());
+            fileE.setFileType(fileEntity.getFileType());
+            fileE.setFileName(fileEntity.getFileName());
+            fileE.setFileId(fileEntity.getFileId());
+            fileE.setData(fileEntity.getData());
+            fileE.setCoordinator(coordinator);
+            fileE=filesRepository.save(fileE);
+            return fileE;
+        }
     }
 
     @Override
