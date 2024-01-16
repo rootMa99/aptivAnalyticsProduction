@@ -48,4 +48,12 @@ public class AdminController {
     public void saveDataToDataBase(MultipartFile file) throws IllegalAccessException {
         dataService.saveDataToDataBase(file);
     }
+
+    @PostMapping(path = "/adminpic")
+    public FileRest uploadAdminPic(@RequestParam(value="file") MultipartFile file){
+        FileEntity fileEntity=fileService.addAdminPic(file);
+        FileRest fileRest=new FileRest();
+        BeanUtils.copyProperties(fileEntity, fileRest);
+        return fileRest;
+    }
 }

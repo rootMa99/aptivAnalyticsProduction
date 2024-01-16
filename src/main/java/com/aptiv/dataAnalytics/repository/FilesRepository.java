@@ -8,4 +8,5 @@ public interface FilesRepository extends JpaRepository<FileEntity, Long> {
     FileEntity findByProjectId(long id);
     FileEntity findByCoordinatorId(long id);
     FileEntity findByShiftLeaderId(long id);
+    FileEntity findByFileName(String fileName);
 }

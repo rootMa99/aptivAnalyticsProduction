@@ -12,15 +12,12 @@ import com.aptiv.dataAnalytics.repository.ProjectRepo;
 import com.aptiv.dataAnalytics.repository.ShiftLeaderRepo;
 import com.aptiv.dataAnalytics.service.FileService;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.Arrays;
 
 
 @Service
@@ -69,7 +66,22 @@ public class FileServideImpl implements FileService {
             throw new FileStorageException("Could not store file " + fileName + ". Please try again!");
         }
     }
-
+    @Override
+    public FileEntity addAdminPic(MultipartFile file){
+        FileEntity fileEntity= uploadFile(file);
+        String fileDownloadUri =
+                ServletUriComponentsBuilder.fromCurrentContextPath().path("/data").path("/downloadFile/").path("admin").toUriString();
+        fileEntity.setFileDownloadUri(fileDownloadUri);
+        fileEntity.setFileName("adminpic");
+        fileEntity.setFileId("admin");
+        FileEntity fileN= filesRepository.findByFileId("admin");
+        if (fileN==null){
+            return filesRepository.save(fileEntity);
+        }else {
+            fileN.setData(fileEntity.getData());
+            return filesRepository.save(fileN);
+        }
+    }
     @Override
     public FileEntity addFileToSL(String name, MultipartFile file) {
         FileEntity fileEntity= uploadFile(file);
