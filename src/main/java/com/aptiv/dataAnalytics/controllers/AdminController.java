@@ -1,13 +1,17 @@
 package com.aptiv.dataAnalytics.controllers;
 
+import com.aptiv.dataAnalytics.domain.Admin;
 import com.aptiv.dataAnalytics.domain.FileEntity;
+import com.aptiv.dataAnalytics.model.Changepwd;
 import com.aptiv.dataAnalytics.model.FileRest;
 import com.aptiv.dataAnalytics.model.ProjectRest;
+import com.aptiv.dataAnalytics.service.AuthenticationService;
 import com.aptiv.dataAnalytics.service.DataService;
 import com.aptiv.dataAnalytics.service.FileService;
 import com.aptiv.dataAnalytics.service.ProjectService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,6 +23,7 @@ public class AdminController {
     private DataService dataService;
     private ProjectService projectService;
     private FileService fileService;
+    private AuthenticationService authenticationService;
     @GetMapping(path="/getData")
     public ProjectRest getAllData(@RequestParam String projectName){
         return dataService.getAllByProject(projectName);
@@ -55,5 +60,10 @@ public class AdminController {
         FileRest fileRest=new FileRest();
         BeanUtils.copyProperties(fileEntity, fileRest);
         return fileRest;
+    }
+
+    @PostMapping(path = "/changePwd")
+    public ResponseEntity<Admin> changePwd(@RequestBody Changepwd changepwd){
+        return ResponseEntity.ok(authenticationService.changePassword(changepwd));
     }
 }

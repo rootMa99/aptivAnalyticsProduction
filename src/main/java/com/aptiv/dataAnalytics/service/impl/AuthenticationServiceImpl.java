@@ -2,10 +2,7 @@ package com.aptiv.dataAnalytics.service.impl;
 
 import com.aptiv.dataAnalytics.domain.Admin;
 import com.aptiv.dataAnalytics.domain.Role;
-import com.aptiv.dataAnalytics.model.JwtAuthenticationResponse;
-import com.aptiv.dataAnalytics.model.RefreshTokenRequest;
-import com.aptiv.dataAnalytics.model.SigninRequest;
-import com.aptiv.dataAnalytics.model.SignupRequest;
+import com.aptiv.dataAnalytics.model.*;
 import com.aptiv.dataAnalytics.repository.AdminRepo;
 import com.aptiv.dataAnalytics.service.AuthenticationService;
 import com.aptiv.dataAnalytics.service.JWTService;
@@ -13,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +23,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JWTService jwtService;
+
     @Override
     public Admin signUp(SignupRequest signupRequest) {
         Admin admin=new Admin();
@@ -34,7 +33,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         return userRepository.save(admin);
     }
-
+    @Override
+    public Admin changePassword(Changepwd changepwd){
+        Admin admin=userRepository.findByRole(Role.ADMIN);
+        admin.setPassword(new BCryptPasswordEncoder().encode(changepwd.getPassword()));
+        return userRepository.save(admin);
+    }
     @Override
     public JwtAuthenticationResponse signIn(SigninRequest signinRequest) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(signinRequest.getAdminName(),
