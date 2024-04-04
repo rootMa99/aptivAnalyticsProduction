@@ -29,7 +29,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:3000/")
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/data")
 @AllArgsConstructor
@@ -55,6 +55,4 @@ public class DataController {
         FileEntity fileEntity = fileService.getFileByFileId(fileId);
         return ResponseEntity.ok().contentType(MediaType.parseMediaType(fileEntity.getFileType())).header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" +fileEntity.getFileName()+"\"").body(new ByteArrayResource(fileEntity.getData()));
     }
-
-
 }
