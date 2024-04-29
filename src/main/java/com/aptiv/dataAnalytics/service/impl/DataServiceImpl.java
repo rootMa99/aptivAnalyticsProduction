@@ -101,6 +101,7 @@ public class DataServiceImpl implements DataService {
                     Data data=new Data();
                     Data upd=dataRepo.findByDatecrAndCrewName(dataExcel.getDate(), dataExcel.getCrew());
                     if (upd!=null){
+                        System.out.println("data found");
                         data.setId(upd.getId());
                     }
                     data.setDatecr(dataExcel.getDate());
