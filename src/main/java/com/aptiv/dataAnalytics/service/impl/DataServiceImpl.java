@@ -99,6 +99,10 @@ public class DataServiceImpl implements DataService {
                 for (DataExcel dataExcel: dataExcelList){
                     System.out.println("record saved");
                     Data data=new Data();
+                    Data upd=dataRepo.findByDatecrAndCrewName(dataExcel.getDate(), dataExcel.getCrew());
+                    if (upd!=null){
+                        data.setId(upd.getId());
+                    }
                     data.setDatecr(dataExcel.getDate());
                     data.setActualData(mp.map(dataExcel.getActualDataExcel(), ActualData.class));
                     data.setDataTarget(mp.map(dataExcel.getDataTargetExcel(), DataTarget.class));
