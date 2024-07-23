@@ -9,15 +9,18 @@ import com.aptiv.dataAnalytics.model.DataTargetExcel;
 import com.aptiv.dataAnalytics.repository.CoordinatorRepo;
 import com.aptiv.dataAnalytics.service.CoordinatorService;
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
+@Service
 public class CoordinatorServiceImpl implements CoordinatorService {
 
     CoordinatorRepo coordinatorRepo;
-@Override
+
+    @Override
     public CoordinatorRest getCoordinatorData(String name) {
         Coordinator c = coordinatorRepo.findByName(name);
         CoordinatorRest cr = new CoordinatorRest();
@@ -26,7 +29,7 @@ public class CoordinatorServiceImpl implements CoordinatorService {
         for (Data d : c.getData()) {
             DataExcel de = new DataExcel(d.getProject().getName(), "", d.getFamily().getName(), d.getCrew().getName(),
                     d.getTeamLeader().getName(), d.getShiftLeader().getName(), "", "",
-                    d.getCoordinator().getFile().getFileDownloadUri(), d.getMonth().getMonthName(),
+                    "", d.getMonth().getMonthName(),
                     d.getWeek().getWeekName(), d.getDatecr(), new ActualDataExcel(d.getActualData().getOutput(),
                     d.getActualData().getProdH(), d.getActualData().getPaidH(), d.getActualData().getTotalhc(),
                     d.getActualData().getHc(), d.getActualData().getOt(), d.getActualData().getAb(),
