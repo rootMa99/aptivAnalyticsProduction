@@ -17,7 +17,7 @@ import java.util.List;
 public class CoordinatorServiceImpl implements CoordinatorService {
 
     CoordinatorRepo coordinatorRepo;
-
+@Override
     public CoordinatorRest getCoordinatorData(String name) {
         Coordinator c = coordinatorRepo.findByName(name);
         CoordinatorRest cr = new CoordinatorRest();
@@ -37,6 +37,7 @@ public class CoordinatorServiceImpl implements CoordinatorService {
                             d.getDataTarget().getScrap(), d.getDataTarget().getScrapTarget()));
             des.add(de);
         }
+        cr.setDataExcelList(des);
         return cr;
     }
 
