@@ -1,7 +1,9 @@
 package com.aptiv.dataAnalytics.service.impl;
 
+import com.aptiv.dataAnalytics.domain.ActualData;
 import com.aptiv.dataAnalytics.domain.Coordinator;
-import com.aptiv.dataAnalytics.domain.Data;
+import com.aptiv.dataAnalytics.domain.DataTarget;
+import com.aptiv.dataAnalytics.domain.FileEntity;
 import com.aptiv.dataAnalytics.model.ActualDataExcel;
 import com.aptiv.dataAnalytics.model.CoordinatorRest;
 import com.aptiv.dataAnalytics.model.DataExcel;
@@ -11,8 +13,8 @@ import com.aptiv.dataAnalytics.service.CoordinatorService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
@@ -25,23 +27,60 @@ public class CoordinatorServiceImpl implements CoordinatorService {
         Coordinator c = coordinatorRepo.findByName(name);
         CoordinatorRest cr = new CoordinatorRest();
         cr.setCoordinatorName(c.getName());
-        List<DataExcel> des = new ArrayList<>();
-        for (Data d : c.getData()) {
-            DataExcel de = new DataExcel(d.getProject().getName(), "", d.getFamily().getName(), d.getCrew().getName(),
-                    d.getTeamLeader().getName(), d.getShiftLeader().getName(), "", "",
-                    "", d.getMonth().getMonthName(),
-                    d.getWeek().getWeekName(), d.getDatecr(), new ActualDataExcel(d.getActualData().getOutput(),
-                    d.getActualData().getProdH(), d.getActualData().getPaidH(), d.getActualData().getTotalhc(),
-                    d.getActualData().getHc(), d.getActualData().getOt(), d.getActualData().getAb(),
-                    d.getActualData().getTlo(), d.getActualData().getDt(), d.getActualData().getWsd()),
-                    new DataTargetExcel(d.getDataTarget().getOutputTarget(), d.getDataTarget().getProdTarget(),
-                            d.getDataTarget().getPayedTarget(), d.getDataTarget().getHcTarget(),
-                            d.getDataTarget().getAbsTarget(), d.getDataTarget().getDtTarget(),
-                            d.getDataTarget().getScrap(), d.getDataTarget().getScrapTarget()));
-            des.add(de);
-        }
+
+        List<DataExcel> des = c.getData().stream().map(d -> {
+            String fileDownloadUri = "";
+            Coordinator coordinator = d.getCoordinator();
+            if (coordinator != null) {
+                FileEntity file = coordinator.getFile();
+                if (file != null) {
+                    fileDownloadUri = file.getFileDownloadUri();
+                }
+            }
+
+            ActualData actualData = d.getActualData();
+            DataTarget dataTarget = d.getDataTarget();
+            return new DataExcel(
+                    d.getProject().getName(),
+                    "",
+                    d.getFamily().getName(),
+                    d.getCrew().getName(),
+                    d.getTeamLeader().getName(),
+                    d.getShiftLeader().getName(),
+                    "",
+                    "",
+                    fileDownloadUri,
+                    d.getMonth().getMonthName(),
+                    d.getWeek().getWeekName(),
+                    d.getDatecr(),
+                    new ActualDataExcel(
+                            actualData.getOutput(),
+                            actualData.getProdH(),
+                            actualData.getPaidH(),
+                            actualData.getTotalhc(),
+                            actualData.getHc(),
+                            actualData.getOt(),
+                            actualData.getAb(),
+                            actualData.getTlo(),
+                            actualData.getDt(),
+                            actualData.getWsd()
+                    ),
+                    new DataTargetExcel(
+                            dataTarget.getOutputTarget(),
+                            dataTarget.getProdTarget(),
+                            dataTarget.getPayedTarget(),
+                            dataTarget.getHcTarget(),
+                            dataTarget.getAbsTarget(),
+                            dataTarget.getDtTarget(),
+                            dataTarget.getScrap(),
+                            dataTarget.getScrapTarget()
+                    )
+            );
+        }).collect(Collectors.toList());
+
         cr.setDataExcelList(des);
         return cr;
     }
+
 
 }
