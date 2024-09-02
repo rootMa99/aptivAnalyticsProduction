@@ -7,5 +7,5 @@ import java.util.List;
 public interface CoordinatorService {
     CoordinatorRest getCoordinatorData(String name);
 
-    List<CoordinatorRest> getAllCoordinatorData();
+    CoordinatorRest getAllCoordinatorData();
 }

@@ -63,7 +63,7 @@ public class DataController {
         return coordinatorService.getCoordinatorData(coordinatorName);
     }
     @GetMapping(path="/coordinatorsData")
-    public List<CoordinatorRest> getCoordinatorData(){
+    public CoordinatorRest getCoordinatorData(){
         return coordinatorService.getAllCoordinatorData();
     }
 }

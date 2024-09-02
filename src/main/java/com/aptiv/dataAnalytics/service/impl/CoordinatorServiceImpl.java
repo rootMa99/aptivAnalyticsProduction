@@ -84,27 +84,30 @@ public class CoordinatorServiceImpl implements CoordinatorService {
     }
 
     @Override
-    public List<CoordinatorRest> getAllCoordinatorData() {
+    public CoordinatorRest getAllCoordinatorData() {
         List<Coordinator> coordinators = coordinatorRepo.findAll();
-        List<CoordinatorRest> coordinatorRests = new ArrayList<>();
+        CoordinatorRest cr = new CoordinatorRest();
+        cr.setCoordinatorName("manager");
+
+        List<DataExcel> des = new ArrayList<>();
 
         for (Coordinator c : coordinators) {
-            CoordinatorRest cr = new CoordinatorRest();
-            cr.setCoordinatorName(c.getName());
-
-            List<DataExcel> des = c.getData().stream().map(d -> {
+            List<DataExcel> coordinatorData = c.getData().stream().map(d -> {
                 String fileDownloadUri = "";
+                String coordinatorUriPic = "";
+
                 Coordinator coordinator = d.getCoordinator();
                 if (coordinator != null) {
                     FileEntity file = coordinator.getFile();
                     if (file != null) {
                         fileDownloadUri = file.getFileDownloadUri();
                     }
+                    coordinatorUriPic = coordinator.getName();
                 }
 
                 ActualData actualData = d.getActualData();
                 DataTarget dataTarget = d.getDataTarget();
-                assert d.getCoordinator() != null;
+
                 return new DataExcel(
                         d.getProject().getName(),
                         "",
@@ -113,7 +116,7 @@ public class CoordinatorServiceImpl implements CoordinatorService {
                         d.getTeamLeader().getName(),
                         d.getShiftLeader().getName(),
                         "",
-                        d.getCoordinator().getName(),
+                        coordinator != null ? coordinator.getName() : "",
                         fileDownloadUri,
                         d.getMonth().getMonthName(),
                         d.getWeek().getWeekName(),
@@ -143,12 +146,13 @@ public class CoordinatorServiceImpl implements CoordinatorService {
                 );
             }).collect(Collectors.toList());
 
-            cr.setDataExcelList(des);
-            coordinatorRests.add(cr);
+            des.addAll(coordinatorData);
         }
 
-        return coordinatorRests;
+        cr.setDataExcelList(des);
+        return cr;
     }
+
 
 
 
