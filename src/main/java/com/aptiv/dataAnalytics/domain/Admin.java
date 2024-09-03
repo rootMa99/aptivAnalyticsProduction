@@ -1,10 +1,7 @@
 package com.aptiv.dataAnalytics.domain;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -21,6 +18,7 @@ public class Admin implements UserDetails {
     private Long Id;
     private String adminName;
     private String password;
+    @Enumerated(EnumType.STRING)
     private Role role;
 
     @Override
